@@ -12,7 +12,7 @@ except:
     
     
     # The folliwing line is useful in Jupyter notebook
-    %matplotlib inline
+    # %matplotlib inline
 
 
 
@@ -37,9 +37,12 @@ else:
 
 
 font_path = "usr/share/fonts/truetype/"
-
-font24 = ImageFont.truetype('usr/share/fonts/truetype/droid/DroidSans.ttf', 24) #24 Chars across the screen
-font18 = ImageFont.truetype('usr/share/fonts/truetype/droid/DroidSans.ttf', 18)
+try:
+    font24 = ImageFont.truetype('usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf', 24) #24 Chars across the screen
+    font18 = ImageFont.truetype('usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf', 18)
+except:
+    font24 = ImageFont.load_default()
+    font18 = ImageFont.load_default()
 
 drawblack = ImageDraw.Draw(HBlackimage)
 drawred = ImageDraw.Draw(HRedimage)
