@@ -5,3 +5,4 @@ Hardware:
 Raspberry Pi
 Waveshare e-paper 2.7B (Black, White, Red) HAT
 
+Display simple things like weather or calendars on the e-paper display. 
