@@ -1,3 +1,5 @@
+
+
 import time
 import arrow as arw
 
@@ -21,7 +23,7 @@ def parse_hourly(hourly):
     
     # TODO Extract percent chance of rain
     for period in hourly['properties']['periods']:
-        position = str(period['number'])
+        position = period['number']
         day = arw.get(period['startTime']).format("DD")
         hour = arw.get(period['startTime']).format("HH")
         temperature = period['temperature']
@@ -37,7 +39,20 @@ def parse_hourly(hourly):
                            'wind_dir':wind_dir}
         
     return parsed
+
+def get_hourly():
+    
+    noaa_api = "https://api.weather.gov/points/" + lat_long
+    
+    station_info = get_json(noaa_api)
+    hourly_url = station_info['properties']['forecastHourly']
+    
+    hourly = get_json(hourly_url)
+    formatted_hourly = parse_hourly(hourly)
         
+    return formatted_hourly
+
+
 # TODO - use config file
 lat_long = "36.064444,-79.398056"
 

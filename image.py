@@ -6,6 +6,8 @@
 
 from PIL import Image,ImageDraw,ImageFont
 
+import weather as w
+
 try: # this is for quick developement only
     import epd2in7b
     raspi = True
@@ -28,43 +30,61 @@ if raspi:
     epd = epd2in7b.EPD()
 
     epd.init()
-    epd.Clear()
-
-    # blackimage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
-    # redimage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
+    
     h_black_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126
     h_red_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126    
  
     
 else:
-    # blackimage = Image.new('1', (298, 126), 255)  # 255: clear the frame
-    # redimage = Image.new('1', (298, 126), 255)  # 255: clear the frame
+    
     h_black_image = Image.new('1', (298, 176), 255)  # 298*126
     h_red_image = Image.new('1', (298, 176), 255)  # 298*126    
-
-
-
 
 
 font24 = ImageFont.truetype(font_path, 24) #24 Chars across the screen
 font18 = ImageFont.truetype(font_path, 18)
 
-#    font24 = ImageFont.load_default()
-#    font18 = ImageFont.load_default()
+line_pos = {
+            0:(97, 0),
+            1:(97, 28),
+            2:(97, 56),
+            3:(97, 84),
+            4:(97, 112),
+            5:(97, 140),
+            }
+
+
 
 test_string = 'abcdefghijklmnopqrstuv'
 test_string = 'ABCEEFGHIJKLMNOPQRST'
-test_string = "| 23 | 10 | 20 | W |"
+test_string = "| 23 | 10 | 20  W |"
+header      = "| H  | tp | W dir"
 print(len(test_string))
+
+hourly_forecast = w.get_hourly()
+
+
 
 drawblack = ImageDraw.Draw(h_black_image)
 drawred = ImageDraw.Draw(h_red_image)
-drawblack.text((97, 0), test_string, font = font24, fill = 0)
+
+drawblack.text((97, 0), header, font = font24, fill = 0)
+for pos in list(line_pos.keys())[1:]:
+    
+    
+    line = "| {} | {} | {}  {} " .format(formatted_hourly[pos]['hour'],
+         formatted_hourly[pos]['temp'],
+         formatted_hourly[pos]['wind'],
+         formatted_hourly[pos]['wind_dir'])
+    print(line)
+    drawblack.text(line_pos[pos], line, font = font24, fill = 0)
+
+'''drawblack.text((97, 0), header, font = font24, fill = 0)
 drawblack.text((97, 28), test_string, font = font24, fill = 0)
 drawblack.text((97, 56), test_string, font = font24, fill = 0)
 drawblack.text((97, 84), test_string, font = font24, fill = 0)
 drawblack.text((97, 112), test_string, font = font24, fill = 0)
-drawblack.text((97, 140), test_string, font = font24, fill = 0)
+drawblack.text((97, 140), test_string, font = font24, fill = 0)'''
 
 
 drawblack.rectangle((0, 0, 264, 176), outline = 0, width= 2)    
