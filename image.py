@@ -6,7 +6,7 @@
 
 from PIL import Image,ImageDraw,ImageFont
 
-import weather as w
+import weather
 
 try: # this is for quick developement only
     import epd2in7b
@@ -61,7 +61,7 @@ test_string = "| 23 | 10 | 20  W |"
 header      = "| H  | tp | W dir"
 print(len(test_string))
 
-hourly_forecast = w.get_hourly()
+hourly_forecast = weather.get_hourly()
 
 
 
