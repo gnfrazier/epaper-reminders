@@ -5,7 +5,7 @@ from PIL import Image,ImageDraw,ImageFont
 
 import epd2in7b
 
-if name = __main__:
+if __name__ == "__main__":
     epd = epd2in7b.EPD()
 
     epd.init()
