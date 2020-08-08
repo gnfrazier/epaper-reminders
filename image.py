@@ -54,17 +54,17 @@ font18 = ImageFont.truetype(font_path, 18)
 
 test_string = 'abcdefghijklmnopqrstuv'
 test_string = 'ABCEEFGHIJKLMNOPQRST'
-test_string = "Fuck it! We'll Do it Live!"
+test_string = "| 23 | 10 | 20 | W |"
 print(len(test_string))
 
 drawblack = ImageDraw.Draw(h_black_image)
 drawred = ImageDraw.Draw(h_red_image)
-drawblack.text((10, 0), test_string, font = font24, fill = 0)
-drawblack.text((10, 28), test_string, font = font24, fill = 0)
-drawblack.text((10, 56), test_string, font = font24, fill = 0)
-drawblack.text((10, 84), test_string, font = font24, fill = 0)
-drawblack.text((10, 112), test_string, font = font24, fill = 0)
-drawblack.text((10, 140), test_string, font = font24, fill = 0)
+drawblack.text((97, 0), test_string, font = font24, fill = 0)
+drawblack.text((97, 28), test_string, font = font24, fill = 0)
+drawblack.text((97, 56), test_string, font = font24, fill = 0)
+drawblack.text((97, 84), test_string, font = font24, fill = 0)
+drawblack.text((97, 112), test_string, font = font24, fill = 0)
+drawblack.text((97, 140), test_string, font = font24, fill = 0)
 
 
 drawblack.rectangle((0, 0, 264, 176), outline = 0, width= 2)    
