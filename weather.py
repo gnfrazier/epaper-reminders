@@ -6,6 +6,11 @@ import json
 
 import requests
 
+with open('conditions_key.json','r') as file:
+    
+    condition_keys = json.load(file)
+
+    
 def get_json(url, seconds=10):
     
     response = requests.get(url).json()
@@ -17,7 +22,9 @@ def get_json(url, seconds=10):
         seconds = seconds + 60
         response = get_json(url, seconds)
         
-    return response
+    return 
+
+
 def parse_hourly(hourly):
     
     parsed = {}
@@ -47,6 +54,7 @@ def parse_hourly(hourly):
                            }
         
     return parsed
+
 
 def get_hourly():
     
@@ -81,6 +89,7 @@ def url_to_icon_precip(url):
 lat_long = "36.064444,-79.398056"
 
 noaa_api = "https://api.weather.gov/points/" + lat_long
+
 
 if __name__ == '__main__':
 
