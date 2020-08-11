@@ -58,7 +58,7 @@ line_pos = {
 test_string = 'abcdefghijklmnopqrstuv'
 test_string = 'ABCEEFGHIJKLMNOPQRST'
 test_string = "| 23 | 10 | 20  W |"
-header      = "| H  | tp | W dir"
+header      = "| H☼| tp | W dir"
 print(len(test_string))
 
 formatted_hourly = weather.get_hourly()

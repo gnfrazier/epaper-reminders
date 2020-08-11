@@ -2,6 +2,7 @@
 
 import time
 import arrow as arw
+import json
 
 import requests
 
@@ -29,14 +30,21 @@ def parse_hourly(hourly):
         temperature = period['temperature']
         wind = period['windSpeed'].replace(' mph','')
         wind_dir = period['windDirection']
-        print('Day: {}  Hour: {}  Temp: {}  Wind: {}'.format(day, hour, temperature, wind))
+        conditions_icon, precip = url_to_icon_precip(period['icon'])
+        
+        print('Day: {}  Hour: {}  Temp: {}  Wind: {} Icon: {} Precip %: {}'.format(
+                            day, hour, temperature, wind, conditions_icon, precip))
         
         parsed[position] = {'position':position,
                            'day':day,
                            'hour':hour,
                            'temp':temperature,
                            'wind':wind,
-                           'wind_dir':wind_dir}
+                           'wind_dir':wind_dir,
+                           'conditions_icon':conditions_icon,
+                            'precip_percent':precip,
+                           
+                           }
         
     return parsed
 
@@ -51,6 +59,22 @@ def get_hourly():
     formatted_hourly = parse_hourly(hourly)
         
     return formatted_hourly
+
+
+def url_to_icon_precip(url):
+   # Parse the URL to the conditions short code
+    condition_short_code_with_precip = url.split('/')[-1].split('?')[0]
+    
+    condition_short_code = condition_short_code_with_precip.split(',')[0]
+    
+    # Precip percentage is after a comma, but not always
+    try:
+        precip = condition_short_code_with_precip.split(',')[1]
+        
+    except:
+        precip = " "
+       
+    return (condition_keys['icons'][condition_short_code]['icon'], precip)
 
 
 # TODO - use config file
