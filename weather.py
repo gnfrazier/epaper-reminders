@@ -1,4 +1,6 @@
 
+#%%writefile "/home/greg/Documents/python/notebooks/epaper/weather.py"
+
 
 import time
 import arrow as arw
@@ -22,7 +24,7 @@ def get_json(url, seconds=10):
         seconds = seconds + 60
         response = get_json(url, seconds)
         
-    return 
+    return response
 
 
 def parse_hourly(hourly):
@@ -83,6 +85,8 @@ def url_to_icon_precip(url):
         precip = " "
        
     return (condition_keys['icons'][condition_short_code]['icon'], precip)
+
+
 
 
 # TODO - use config file
