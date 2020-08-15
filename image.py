@@ -38,12 +38,15 @@ if raspi:
     h_black_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126
     h_red_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126    
  
+    formatted_hourly = weather.get_hourly()
+
     
 else:
     
     h_black_image = Image.new('1', (298, 176), 255)  # 298*126
     h_red_image = Image.new('1', (298, 176), 255)  # 298*126    
 
+    formatted_hourly = get_hourly()
 
 font24 = ImageFont.truetype(font_path, 24) #24 Chars across the screen
 font18 = ImageFont.truetype(font_path, 18)
@@ -65,7 +68,6 @@ test_string = "| 23 | 10 | 20  W |"
 header      = "| HR | tp | W dir"
 print(len(test_string))
 
-formatted_hourly = get_hourly()
 
 print(formatted_hourly)
 
