@@ -46,12 +46,35 @@ else:
     h_black_image = Image.new('1', (298, 176), 255)  # 298*126
     h_red_image = Image.new('1', (298, 176), 255)  # 298*126    
 
-    formatted_hourly = get_hourly()
+    formatted_hourly = weather.get_hourly()
 
 font24 = ImageFont.truetype(font_path, 24) #24 Chars across the screen
 font18 = ImageFont.truetype(font_path, 18)
 
-line_pos = {
+
+
+
+test_string = 'abcdefghijklmnopqrstuv'
+test_string = 'ABCEEFGHIJKLMNOPQRST'
+test_string = "| 23 | 10 | 20  W |"
+
+def test_text_screen(test_string='ABCEEFGHIJKLMNOPQRST'):
+    drawblack = ImageDraw.Draw(h_black_image)
+    drawred = ImageDraw.Draw(h_red_image)
+
+    drawblack.text((97, 0), header, font = font24, fill = 0)
+    drawblack.text((97, 28), test_string, font = font24, fill = 0)
+    drawblack.text((97, 56), test_string, font = font24, fill = 0)
+    drawblack.text((97, 84), test_string, font = font24, fill = 0)
+    drawblack.text((97, 112), test_string, font = font24, fill = 0)
+    drawblack.text((97, 140), test_string, font = font24, fill = 0)
+
+
+
+
+def text_hourly(formatted_hourly):
+
+    line_pos = {
             0:(97, 0),
             1:(97, 28),
             2:(97, 56),
@@ -60,44 +83,35 @@ line_pos = {
             5:(97, 140),
             }
 
-
-
-test_string = 'abcdefghijklmnopqrstuv'
-test_string = 'ABCEEFGHIJKLMNOPQRST'
-test_string = "| 23 | 10 | 20  W |"
-header      = "| HR | tp | W dir"
-print(len(test_string))
-
-
-print(formatted_hourly)
-
-drawblack = ImageDraw.Draw(h_black_image)
-drawred = ImageDraw.Draw(h_red_image)
-
-drawblack.text((97, 0), header, font = font24, fill = 0)
-for pos in list(line_pos.keys())[1:]:
     
+    drawblack = ImageDraw.Draw(h_black_image)
+    drawred = ImageDraw.Draw(h_red_image)
     
-    line = "| {} | {} | {}  {} " .format(formatted_hourly[pos]['hour'],
-         formatted_hourly[pos]['temp'],
-         formatted_hourly[pos]['conditions_icon'],
-         formatted_hourly[pos]['precip_percent'])
-    print(line)
-    drawblack.text(line_pos[pos], line, font = font24, fill = 0)
+    header      = "| HR | tp | W dir"
+    drawblack.text((97, 0), header, font = font24, fill = 0)
+    
 
-'''drawblack.text((97, 0), header, font = font24, fill = 0)
-drawblack.text((97, 28), test_string, font = font24, fill = 0)
-drawblack.text((97, 56), test_string, font = font24, fill = 0)
-drawblack.text((97, 84), test_string, font = font24, fill = 0)
-drawblack.text((97, 112), test_string, font = font24, fill = 0)
-drawblack.text((97, 140), test_string, font = font24, fill = 0)'''
+    
+    for pos in list(line_pos.keys())[1:]:
 
+        line = "| {} | {} | {}  {} " .format(formatted_hourly[pos]['hour'],
+             formatted_hourly[pos]['temp'],
+             formatted_hourly[pos]['conditions_icon'],
+             formatted_hourly[pos]['precip_percent'])
+        
+        print(line)
+        drawblack.text(line_pos[pos], line, font = font24, fill = 0)
 
-drawblack.rectangle((0, 0, 264, 176), outline = 0, width= 2)    
+    drawblack.rectangle((0, 0, 264, 176), outline = 0, width= 2)    
+    
+    return True
+
 
 # plt.imshow(drawblack)
 if raspi:
+    text_hourly(formatted_hourly)
     epd.display(epd.getbuffer(h_black_image), epd.getbuffer(h_red_image))
 
 else:
+    text_hourly(formatted_hourly)
     display(h_black_image)
