@@ -8,6 +8,10 @@ from PIL import Image,ImageDraw,ImageFont
 
 import weather
 
+with open('conditions_key.json','r') as file:
+    
+    condition_keys = json.load(file)
+
 try: # this is for quick developement only
     import epd2in7b
     raspi = True
@@ -58,12 +62,12 @@ line_pos = {
 test_string = 'abcdefghijklmnopqrstuv'
 test_string = 'ABCEEFGHIJKLMNOPQRST'
 test_string = "| 23 | 10 | 20  W |"
-header      = "| H☼| tp | W dir"
+header      = "| HR | tp | W dir"
 print(len(test_string))
 
-formatted_hourly = weather.get_hourly()
+formatted_hourly = get_hourly()
 
-
+print(formatted_hourly)
 
 drawblack = ImageDraw.Draw(h_black_image)
 drawred = ImageDraw.Draw(h_red_image)
@@ -74,8 +78,8 @@ for pos in list(line_pos.keys())[1:]:
     
     line = "| {} | {} | {}  {} " .format(formatted_hourly[pos]['hour'],
          formatted_hourly[pos]['temp'],
-         formatted_hourly[pos]['wind'],
-         formatted_hourly[pos]['wind_dir'])
+         formatted_hourly[pos]['conditions_icon'],
+         formatted_hourly[pos]['precip_percent'])
     print(line)
     drawblack.text(line_pos[pos], line, font = font24, fill = 0)
 
