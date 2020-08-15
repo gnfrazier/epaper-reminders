@@ -3,7 +3,7 @@
 # -*- coding:utf-8 -*-
 
 
-
+import json
 from PIL import Image,ImageDraw,ImageFont
 
 import weather
