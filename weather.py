@@ -31,7 +31,7 @@ def parse_hourly(hourly):
     
     parsed = {}
     
-    # TODO Extract percent chance of rain
+    
     for period in hourly['properties']['periods']:
         position = period['number']
         day = arw.get(period['startTime']).format("DD")
@@ -41,8 +41,6 @@ def parse_hourly(hourly):
         wind_dir = period['windDirection']
         conditions_icon, precip = url_to_icon_precip(period['icon'])
         
-        print('Day: {}  Hour: {}  Temp: {}  Wind: {} Icon: {} Precip %: {}'.format(
-                            day, hour, temperature, wind, conditions_icon, precip))
         
         parsed[position] = {'position':position,
                            'day':day,
