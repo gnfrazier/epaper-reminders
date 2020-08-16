@@ -1,5 +1,4 @@
 
-#%%writefile "/home/greg/Documents/python/notebooks/epaper/weather.py"
 
 
 import time
