@@ -4,6 +4,12 @@ from PIL import Image
 
 import imgkit
 
+def set_up_raspi_display()
+    from pyvirtualdisplay import Display
+
+    display = Display(visible=0, size(800,600))
+    display.start()
+
 def current_hourly_to_html(c,h):
 
     # h is the same as formatted_hourly from the weather api.

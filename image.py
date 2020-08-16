@@ -19,6 +19,9 @@ try: # this is for quick developement only
     raspi = True
     
     font_path = '/usr/share/fonts/opentype/linux-libertine/LinBiolinum_R.otf'
+    
+    # Enable a raspberrpi running headless.
+    json2image.set_up_raspi_display()
 
     
 except:
