@@ -4,10 +4,10 @@ from PIL import Image
 
 import imgkit
 
-def set_up_raspi_display()
+def set_up_raspi_display():
     from pyvirtualdisplay import Display
 
-    display = Display(visible=0, size(800,600))
+    display = Display(visible=0, size=(800,600), backend='xvfb')
     display.start()
 
 def current_hourly_to_html(c,h):
