@@ -4,21 +4,26 @@ from PIL import Image
 
 import imgkit
 
-def hourly_to_html(h):
+def current_hourly_to_html(c,h):
 
-    h = formatted_hourly
-
+    # h is the same as formatted_hourly from the weather api.
+    
+    cur_temp_cell = '<td class="large" rowspan="2">{}°</td>'.format(c['cur_temp'])
+    cur_humidity_cell = '<td class="large" rowspan="2">{}﹪</td>'.format(c['cur_temp'])
+    cur_time_cell = '<td class="small" rowspan="2">{}</td>'.format('Upd:<br>23:00')
+    
+    
     hours = [2,5,8,11,14]
-    time = ''
+    time = cur_temp_cell
     temp = ''
-    wind = ''
+    wind = cur_humidity_cell
     wind_dir = ''
     conditions = ''
-    precip_percent = ''
+    precip_percent = cur_time_cell
     for i in hours:
 
 
-        if h[i]['precip_percent']:
+        if h[i]['precip_percent']!=' ':
             formatted_precip = h[i]['precip_percent']+'﹪'
         else:
             formatted_precip = ''
@@ -53,6 +58,15 @@ def hourly_to_html(h):
                   border-style: hidden hidden hidden solid;
                   padding: 3px;
                 }
+            td.large {
+                font-size: 20px;
+                border-style: hidden hidden hidden hidden;
+            
+                }
+            td.small {
+                font-size: 10px;
+                border-style: hidden hidden hidden hidden;
+                }
             </style>
             </head>
             <body style="background-color:white;">'''
@@ -84,7 +98,7 @@ def html_to_jpg(html_page,file_name):
     return im
 
 
-def crop_hourly_2in7(uncropped_image):
+def table_crop_hourly_2in7(uncropped_image):
 
     # total image size W,H 264, 176
     image_dim = (264,176)
@@ -98,9 +112,24 @@ def crop_hourly_2in7(uncropped_image):
     
     return im_crop
 
-def hourly_json_to_jpg(formatted_hourly):
+
+def crop_hourly_2in7(uncropped_image):
+
+    # total image size W,H 264, 176
+    image_dim = (264,176)
+
+
     
-    hourly_html = hourly_to_html(formatted_hourly)
+    (left, upper, right, lower) = (5, 0, image_dim[0]+5, image_dim[1])
+    
+    im_crop = uncropped_image.crop((left, upper, right, lower))
+    
+    return im_crop
+
+
+def current_hourly_json_to_jpg(current_cond, formatted_hourly):
+    
+    hourly_html = current_hourly_to_html(current_cond,formatted_hourly)
     
     uncropped = html_to_jpg(hourly_html, 'hourly_table')  
     
