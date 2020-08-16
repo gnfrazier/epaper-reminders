@@ -6,12 +6,14 @@
 import json
 from PIL import Image,ImageDraw,ImageFont
 
+import json2image
 import weather
 
 with open('conditions_key.json','r') as file:
     
     condition_keys = json.load(file)
 
+    
 try: # this is for quick developement only
     import epd2in7b
     raspi = True
@@ -28,7 +30,7 @@ except:
     # The folliwing line is useful in Jupyter notebook
     # %matplotlib inline
 
-font_path = '/usr/share/fonts/opentype/linux-libertine/LinBiolinum_R.otf'
+    font_path = '/usr/share/fonts/opentype/linux-libertine/LinBiolinum_R.otf'
 
 if raspi:
     epd = epd2in7b.EPD()
@@ -38,7 +40,7 @@ if raspi:
     h_black_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126
     h_red_image = Image.new('1', (epd.height, epd.width), 255)  # 298*126    
  
-    formatted_hourly = weather.get_hourly()
+    
 
     
 else:
@@ -46,17 +48,11 @@ else:
     h_black_image = Image.new('1', (298, 176), 255)  # 298*126
     h_red_image = Image.new('1', (298, 176), 255)  # 298*126    
 
-    formatted_hourly = weather.get_hourly()
+    
 
 font24 = ImageFont.truetype(font_path, 24) #24 Chars across the screen
 font18 = ImageFont.truetype(font_path, 18)
 
-
-
-
-test_string = 'abcdefghijklmnopqrstuv'
-test_string = 'ABCEEFGHIJKLMNOPQRST'
-test_string = "| 23 | 10 | 20  W |"
 
 def test_text_screen(test_string='ABCEEFGHIJKLMNOPQRST'):
     drawblack = ImageDraw.Draw(h_black_image)
@@ -70,6 +66,7 @@ def test_text_screen(test_string='ABCEEFGHIJKLMNOPQRST'):
     drawblack.text((97, 140), test_string, font = font24, fill = 0)
 
 
+    return drawblack, drawred
 
 
 def text_hourly(formatted_hourly):
@@ -108,10 +105,22 @@ def text_hourly(formatted_hourly):
 
 
 # plt.imshow(drawblack)
-if raspi:
-    text_hourly(formatted_hourly)
-    epd.display(epd.getbuffer(h_black_image), epd.getbuffer(h_red_image))
 
-else:
-    text_hourly(formatted_hourly)
-    display(h_black_image)
+if __name__ == '__main__':
+
+    #station_id = weather.get_nearest_station(stations_url)
+    current_cond = weather.get_current()
+
+    formatted_hourly = weather.get_hourly()
+
+    h_black_image = json2image.current_hourly_json_to_jpg(
+                        current_cond,
+                        formatted_hourly)
+
+    if raspi:
+
+        epd.display(epd.getbuffer(h_black_image), epd.getbuffer(h_red_image))
+
+    else:
+
+        display(h_black_image)
