@@ -156,11 +156,8 @@ if __name__ == '__main__':
         city_state = station_info['properties']['relativeLocation']['properties']
 
         station_id = get_nearest_station(stations_url)
-        nearest_conditions_url = 'https://api.weather.gov/stations/{}/observations'.format(station_id)
-        current_cond = get_json(nearest_conditions_url)
+        current_cond = get_current(station_id)
 
-        hourly = get_json(hourly_url)
-        formatted_hourly = parse_hourly(hourly)
+        formatted_hourly = get_hourly(station_id)
     else:
         print('Unable to reach weather.gov please wait and try again.')
-  
