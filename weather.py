@@ -13,6 +13,23 @@ with open('conditions_key.json','r') as file:
     condition_keys = json.load(file)
 
     
+    
+def to_f(celsius):
+    
+    if celsius:
+        f = int((float(celsius) * 1.8) + 32)
+    else:
+        f = None
+        
+    return f
+
+def to_mph(kmh):
+    
+    if kmh:
+        mph = int(float(kmh) / 1.609)
+    
+    return mph
+    
 def get_json(url, seconds=10):
     
     response = requests.get(url).json()
@@ -26,6 +43,12 @@ def get_json(url, seconds=10):
         
     return response
 
+def get_nearest_station(station_url):
+    stations = get_json(station_url)
+
+    identifier = stations['features'][0]['properties']['stationIdentifier']
+
+    return identifier
 
 def parse_hourly(hourly):
     
@@ -56,11 +79,11 @@ def parse_hourly(hourly):
     return parsed
 
 
-def get_hourly():
+def get_hourly(station_info=None):
     
-    noaa_api = "https://api.weather.gov/points/" + lat_long
     
-    station_info = get_json(noaa_api)
+    if station_info != True:
+        station_info = get_json(noaa_api)
     hourly_url = station_info['properties']['forecastHourly']
     
     hourly = get_json(hourly_url)
@@ -68,6 +91,35 @@ def get_hourly():
         
     return formatted_hourly
 
+def get_current(station_info=None):
+    
+    
+    if station_info !=True:
+        station_info = get_json(noaa_api)
+
+    stations_url = station_info['properties']['observationStations']
+    station_id = get_nearest_station(stations_url)
+    nearest_conditions_url = 'https://api.weather.gov/stations/{}/observations'.format(station_id)
+    current_cond = get_json(nearest_conditions_url)
+    
+    formatted_current = parse_current(current_cond)
+ 
+    return formatted_current
+  
+def parse_current(present_conditions):
+    latest = present_conditions['features'][0]['properties'] 
+
+    present_weather = {
+            'cur_timestamp':latest['timestamp'],
+            'cur_temp':to_f(latest['temperature']['value']),
+            'cur_wind':to_mph(latest['windSpeed']['value']),
+            'cur_wind_dir':latest['windDirection']['value'],
+            'cur_humidity':int(latest['relativeHumidity']['value']),
+            'cur_heat_index':to_f(latest['heatIndex']['value']),
+            'cur_wind_chill':to_f(latest['windChill']['value']),
+                }
+    return present_weather
+ 
 
 def url_to_icon_precip(url):
    # Parse the URL to the conditions short code
@@ -99,11 +151,16 @@ if __name__ == '__main__':
     if station_info:
         forecast_url = station_info['properties']['forecast']
         hourly_url = station_info['properties']['forecastHourly']
+        grid_data_url = station_info['properties']['forecastGridData']
         stations_url = station_info['properties']['observationStations']
         city_state = station_info['properties']['relativeLocation']['properties']
+
+        station_id = get_nearest_station(stations_url)
+        nearest_conditions_url = 'https://api.weather.gov/stations/{}/observations'.format(station_id)
+        current_cond = get_json(nearest_conditions_url)
 
         hourly = get_json(hourly_url)
         formatted_hourly = parse_hourly(hourly)
     else:
         print('Unable to reach weather.gov please wait and try again.')
-    
+  
